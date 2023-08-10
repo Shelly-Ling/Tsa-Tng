@@ -21,6 +21,7 @@
     flex-direction: column;
   }
 }
+// 太通用的 class 要留意專案中是否會被互相覆蓋，在決定要寫在 css 哪一層
 .closeBtn {
   position: absolute;
   top: $gapXL;
@@ -100,6 +101,7 @@
   cursor: pointer;
 }
 .deleteModal {
+  // 這邊是你自己的專案所以沒關係，實作中若要把寬高寫死要考慮是否會破版，寬高最好寫的彈性一點
   width: 200px;
   text-align: center;
 }
@@ -112,7 +114,7 @@
     transform: scaleX(0);
   }
 }
-
+// 很有互動的動畫 很棒
 .timerBar {
   width: 100%;
   background-color: $primary;

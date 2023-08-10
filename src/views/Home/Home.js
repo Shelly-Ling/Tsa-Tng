@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import OrderList from '../../components/OrderList/OrderList';
-import banner from '../../images/banner.jpg';
+import banner from '../../Images/banner.jpg';
 import { fetchFoodData } from '../../redux/homeFoodApi';
 import { ENUM_FOOD_TYPE } from '../../utils/dataConstants';
 import './Home.scss';
@@ -39,26 +39,27 @@ function Home() {
           width="100%"
           height="450"
         />
-        {food.length === 0 && (
-          <div className="noFoodData">Sorry! Something went wrong</div>
-        )}
-        {food.length !== 0 && (
-          <>
-            <div className="categoryNav scroll">
-              <ul className="container categoryBtns">
-                {uniqueTypes().map((item) => (
-                  <li
-                    className="categoryBtn"
-                    key={ENUM_FOOD_TYPE[item]}
-                    onClick={() => scrollToCategory(item)}>
-                    {ENUM_FOOD_TYPE[item]}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <Category categoryRefs={categoryRefs} />
-          </>
-        )}
+        {/* 有 if else 的相關情境會用三元寫，單一條件 true 顯示的會用 && */}
+        {food.length === 0 ? (
+            <div className="noFoodData">Sorry! Something went wrong</div>
+          ): (
+            <>
+              <div className="categoryNav scroll">
+                <ul className="container categoryBtns">
+                  {uniqueTypes().map((item) => (
+                    <li
+                      className="categoryBtn"
+                      key={ENUM_FOOD_TYPE[item]}
+                      onClick={() => scrollToCategory(item)}>
+                      {ENUM_FOOD_TYPE[item]}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <Category categoryRefs={categoryRefs} />
+            </>
+          )
+        }
       </main>
       <aside className="sideContainer">
         <OrderList />

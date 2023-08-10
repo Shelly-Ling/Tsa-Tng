@@ -18,8 +18,9 @@ import './OrderList.scss';
 function OrderList({ closeBtn, setIsCartShown }) {
   const dispatch = useDispatch();
   const order = useSelector((state) => state.order.items);
-  const [isModalShown, setIsModalShown] = useState(false);
   const selectedFood = useSelector((state) => state.order.selectedFood);
+  // 可以試試分類宣告的東西，不穿插放置，比較一目了然我資料從 全域 state 抓來 或 組件中宣告，比較易讀 (強迫症)
+  const [isModalShown, setIsModalShown] = useState(false);
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
 
   useEffect(() => {
@@ -41,17 +42,34 @@ function OrderList({ closeBtn, setIsCartShown }) {
     setTimeout(() => setIsDeleteModalShown(false), 800);
   }
 
+
+// 當 function 有 多個參數時，建議參數改為單一個物件傳遞，並視情況給上預設值，這樣調用的時候可以只寫上必要的參數。
+// ex: function editOrderNum({ e = null, item = {}, newQty = 0 }) { ... }
+// 調用範例見下方: 調用參數改為物件例子
   function editOrderNum(e, item, newQty) {
+    //  e.stopPropagation(); 這邊沒有錯，但狀態的改變是用 toolkit 控制 state，所以不阻擋冒泡應該也沒關係，可以拿掉，有必要的情況再使用，也可以不拿，個人習慣寫法而已
+    // 比較常用的是 a 、 button 標籤的 click 行為，會用 e.preventDefault(); 來停止瀏覽器預設行為，交由後續 js 控制
     e.stopPropagation();
+
+    // dispatch 的 { ...item, qty: newQty } 這一段 "組資料的操作" 在 updateOrder 的 slice 中 操作會比較適合，不然 感覺 slice 就淪為只有把 資料存進 state 的功能。
+    // 點餐專案沒有複雜的操作所以看上去還好，但是若是這一段組新資料的情境比較複雜，組新資料的邏輯寫在 component 中 就會讓 component 變的冗長
+    // 複雜情境舉例: 比如購物車勾選結帳商品，要記算總金額跟更新與畫面 ui 掛鉤的狀態
+
+    // 官網範例可以看到是在 createSlice 的 reducers 操作 state 的更動  :https://redux-toolkit.js.org/api/createSlice
     dispatch(updateOrder({ ...item, qty: newQty }));
   }
 
   function handleEditOrder(food) {
     dispatch(setSelectedFood(food));
-    setIsModalShown(true);
+    setIsModalShown(true); // 這邊 也可以把 modal 是否顯示的 狀態存於全域
+
+    // 我發現我之前對 modal 的說法可能讓你誤會，我重述一下想表達的整體意思是:
+    // <modal> 的顯示與否要從 <modal isVisible={isModalShown}> props 決定，而不是從 <Modal> 中自己去抓全域 state 作為是否顯示的參數
+    // 目前你這頁的 modal 實作也 ok，是同樣的邏輯，只是在我們專案中 <Modal> 的顯示設計成是從 <Modal> 接 props 值，但邏輯相同
   }
 
   function modalEditOrder() {
+    // 這邊滿細心的有處理，我有看到按鈕設定為 disable，假設沒有 disable，可能就會跳提示之類的處理
     if (selectedFood.qty === 0) return;
     dispatch(updateOrder(selectedFood));
     setIsModalShown(false);
@@ -163,6 +181,12 @@ function OrderList({ closeBtn, setIsCartShown }) {
                   ) : (
                     <MdOutlineRemoveCircle
                       onClick={(e) => editOrderNum(e, item, item.qty - 1)}
+                      // 調用參數改為物件例子:
+                      // onClick={(e) => editOrderNum({
+                      //   e,
+                      //   item,
+                      //   newQty: item.qty - 1)
+                      // }}
                     />
                   )}
                   <p>{item.qty}</p>

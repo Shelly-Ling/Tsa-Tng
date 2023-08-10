@@ -8,6 +8,7 @@
   box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.12);
   height: 64px;
   align-items: center;
+  justify-content: space-between; // 這邊雖然也沒錯，但會建議有 flex 相關設置通常會優先用 flex，排版設定放在一起的感覺，所以 topBar 的 margin-left: auto; 可以不用，找排版相關的東西實比較好找
   padding: 0px 30px;
   .logo {
     font-size: 30px;
@@ -18,7 +19,7 @@
     }
   }
   .topBar {
-    margin-left: auto;
+    // margin-left: auto; //  topBar 的 margin-left: auto; 可以不用，而是用 flex
     display: flex;
     align-items: center;
     gap: $gapLg;
@@ -39,27 +40,44 @@
     }
   }
   .orderNum {
-    border-radius: 25px;
-    width: 25px;
-    height: 25px;
+    // 一些設定值盡量不要寫死，寫的比較彈性一點可以適應多種情境
+    // 這邊寫死寬高，若 購物車有 200 項商品 就會有點快破版，可以用內容物的間距去推距離比較彈性，
+    // grid 也跟 flex 一樣，不是真的需要的時候可以不用 ~
+
+    // 你的寫法:
+    // border-radius: 25px;
+    // width: 25px;
+    // height: 25px;
+    // font-size: 13px;
+    // display: grid;
+    // place-items: center;
+    // color: $white;
+    // background-color: $primary;
+
+    // 修改後:
+    border-radius: 50%;
+    min-width: 25px;
+    min-height: 25px;
     font-size: 13px;
-    display: grid;
-    place-items: center;
     color: $white;
     background-color: $primary;
+    padding: 3px 4px; // 依照設計稿，設定推出多少元素間距，商品 200 實也沒破版
+    text-align: center;
   }
+
   .cartContainer {
     position: fixed;
-    width: 100%;
+    width: 300px;
     height: 100%;
-    top: 0px;
-    left: 0px;
+    top: 0; // 0 不用寫單位
+    right: 0;
     z-index: 4;
     background-color: #fff;
     padding: 50px 80px;
     max-height: 100vh;
     display: none;
     @media screen and (max-width:960px){
+      // 很細心的處理 RWD
       display: block;
     }
   }

@@ -17,6 +17,7 @@
   padding: 20px;
   background: #fff;
   border-radius: 10px;
+  // line-height: 30px; 之後進專案，如果你是想要 各項文字中有一些間距的話，好像 margin padding 比較好，因為這一行影響了 popup 下的 " 每項元素至少行高為 30px"，要留意一下整體是否會與設計稿相同
   line-height: 30px;
   z-index: 4;
   overflow: hidden;
@@ -33,6 +34,7 @@
     width: 25px;
     height: 25px;
     border-radius: 25px;
+    // grid 通常不會這樣用，因為這邊只是簡單對齊，這邊可以簡單用 padding 去寫距離
     display: grid;
     place-items: center;
     cursor:pointer;
